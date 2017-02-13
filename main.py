@@ -1,5 +1,6 @@
 import sys
 import time
+from texts import allTexts
 #from random import randrange
 
 
@@ -21,11 +22,16 @@ import time
 #add names/verbs for functions
 
 inventory = []
-text = """Do your own thing, on your own terms and get what you came here for...
 
-(*_*) ( *_*)>-o-o (-o_o)
-"""
-text2 = "\nBrown's Hole, Wyoming, 1822"
+def printInventory():
+    if inventory == []:
+        print "\nYour inventory is empty."
+        print "You are so broke, you cant afford to pay attention."
+    else:
+        print "\n", inventory
+
+
+
 
 
 def yourName():
@@ -48,7 +54,7 @@ def slow_text1(str):
 def askQuestionOne():
     choice1 = None #None is always true according to the while loop condition
     while (choice1 != "1" and choice1 != "2"): # if choice1 is not 1 and is not 2, then continue the loop
-        choice1 = raw_input("1. You excuse yourself and walk towards the door." "\n2. You answer, your mama is in the wrong neighborhood.")
+        choice1 = askQuestion("1. You excuse yourself and walk towards the door." "\n2. You answer, your mama is in the wrong neighborhood.")
         if choice1 == "1":
             print ("""\nYou try to stand up only to realize you are tied to the chair. \nThe man gets up, takes the gun and starts walking towards you.""")
         elif choice1 == "2":
@@ -58,9 +64,12 @@ def askQuestionOne():
 
 
 def askQuestionTwo():
+    #if "rope" in inventory:
+    #    print "....."
+
     choice2 = None
     while choice2 != "3":
-        choice2 = raw_input("1. You finish the scotch in your own time." "\n2. You wait for the man to get closer and then you hit him over the head. \n3. You do both.")
+        choice2 = askQuestion("1. You finish the scotch in your own time." "\n2. You wait for the man to get closer and then you hit him over the head. \n3. You do both.")
         if choice2 ==  "1":
             print ("\nFinishing the scotch was awesome! Unfortunately, right when you are done, the guy hits you over the head with his gun and you pass out.")
             print ("You wake up the next day without your cowboy hat, horse and wallet, and to make matters worse you are still tied to the goddamned chair. Game over, pal.")
@@ -70,6 +79,8 @@ def askQuestionTwo():
             print ("Let's try that one more time.")
         elif choice2 == "3":
             continue
+        #elif "rope" in inventory and choice2 == "4":
+
         else:
             print ("\nImpossible move brah.")
 
@@ -77,7 +88,7 @@ def askQuestionTwo():
 def askQuestionThree():
     choice3 = None
     while (choice3 != "1" and choice3 != "2"):
-        choice3 = raw_input("1. You take the badge from Sven and put it on your vest. There is a new sheriff in town." "\n2. You consider this not your problem and suggests that Sven gets rid of it.\n")
+        choice3 = askQuestion("1. You take the badge from Sven and put it on your vest. There is a new sheriff in town." "\n2. You consider this not your problem and suggests that Sven gets rid of it.\n")
         if choice3 == "1":
             print ("\nSven likes the sound of that and serves you another drink.")
             print ("To be continued.")
@@ -99,31 +110,26 @@ def inv():
     print "Inventory: ", inventory
 
 
-def examineInputForGlobalCommands(question):
-    if 'inventory' in question:
+def examineInputForGlobalCommands(answer):
+    if 'inventory' in answer:
         printInventory()
-        return True
-    elif 'help' in question:
+    elif 'help' in answer:
         print 'These are the commands you can use: help inventory'
-        return True
-    else:
-        return False
 
 
 def askQuestion(questionMsg):
     answer = raw_input(questionMsg)
-    if examineInputForGlobalCommands(answer) == False:
-        return answer
-    return None
+    examineInputForGlobalCommands(answer)
+    return answer
 
 
-def pickUpObjectFromManBag()():
-    question = askQuestion("What object do you wanna pick up?.")
-    if question == "money":
+def pickUpObjectFromManBag():
+    answer = askQuestion("What object do you wanna pick up?.")
+    if answer == "money":
         moneyOption()
-    elif question == "tobacco":
+    elif answer == "tobacco":
         tobaccoOption()
-    elif question == "rope":
+    elif answer == "rope":
         ropeOption()
     else:
         print "You leave the manBag untouched."
@@ -135,7 +141,7 @@ def addToInventory(item):
 
 
 def moneyOption():
-    money = raw_input("\n 5 gold coins!\n Do you want to put them in your inventory? (Y/n)")
+    money = askQuestion("\n 5 gold coins!\n Do you want to put them in your inventory? (Y/n)")
     if (money == "Y") or (money == "Yes") or (money == "YES") or (money == "yes"):
         print "Item stored in inventory."
         addToInventory("money")
@@ -145,7 +151,7 @@ def moneyOption():
 
 
 def tobaccoOption():
-    tobacco = raw_input("\n Best tobacco in the country. You better save it for the right occasion. \n Do you want to put the item in your inventory? (Y/n)")
+    tobacco = askQuestion("\n Best tobacco in the country. You better save it for the right occasion. \n Do you want to put the item in your inventory? (Y/n)")
     if (tobacco == "Y") or (tobacco == "Yes") or (tobacco == "YES") or (tobacco == "yes"):
         print "Item stored in inventory."
         addToInventory("tobacco")
@@ -155,7 +161,7 @@ def tobaccoOption():
 
 
 def ropeOption():
-    rope = raw_input("\n A strong rope. \n Do you want to put the item in your inventory? (Y/n)")
+    rope = askQuestion("\n A strong rope. \n Do you want to put the item in your inventory? (Y/n)")
     #if (rope == "Y") or (rope == "Yes") or (rope == "YES") or (rope == "yes"):
     if  rope in ['Y','y','yes','Yes','YES']:
         print "Item stored in inventory."
@@ -165,31 +171,23 @@ def ropeOption():
         print "The rope was put back in the manbag."
 
 #Start!
-slow_text1(text)
+
+slow_text1(allTexts["intro"])
+
 
 playerName = yourName()
 
+slow_text1(allTexts["commandReminder"])
 
-slow_text1(text2)
+slow_text1(allTexts["intro2"])
+
 #Here comes the first question
-print """\n
-Sven the Bartender: Hey %s!!! Get your drunk ass outta here! The saloon is closed.
-You lift your head up from the counter and try to remember what happened.
-You look around only to discover an almost emptied bottle of scotch on the counter in front of you.
-Just another one of those nights... You take another sip straight from the bottle.
-You: Uuh Sven, thank god you are here. Where am I?
-Unknown: In the wrong neighborhood, son.
-You turn around and see a dodgy man sitting by a table in the corner.
-There is a gun on the table.
-What do you do?""" % (playerName)
+print allTexts["question1"] % (playerName)
 
 askQuestionOne()
 
 #Question 2
-print """Damn it! Why are you always getting into trouble?!
-The man is almost next to you and you realize
-you are still holding onto that bottle of scotch.
-What do you want to do next?"""
+print allTexts["question2"]
 
 
 
